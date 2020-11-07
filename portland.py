@@ -18,7 +18,8 @@ from datetime import date
 
 import jsonpickle
 
-from wepppy.all_your_base import RasterDatasetInterpolator, isfloat, RDIOutOfBoundsException
+from wepppy.all_your_base import isfloat
+from wepppy.all_your_base.geo import RasterDatasetInterpolator, RDIOutOfBoundsException
 from wepppy.nodb.base import NoDbBase, TriggerEvents
 
 from wepppy.nodb.mods.locations.location_mixin import LocationMixin

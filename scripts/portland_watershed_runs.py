@@ -12,8 +12,8 @@ from os.path import join as _join
 from wepppy.wepp.out import TotalWatSed
 from wepppy.export import arc_export
 
-from wepppy.nodb.mods.locations.portland import LivnehDataManager
-from wepppy.nodb.mods.locations.portland import ShallowLandSlideSusceptibility, BullRunBedrock
+from wepppy.nodb.mods.locations.portland.livneh_daily_observed import LivnehDataManager
+from wepppy.nodb.mods.locations.portland.bedrock import ShallowLandSlideSusceptibility, BullRunBedrock
 
 from osgeo import gdal
 

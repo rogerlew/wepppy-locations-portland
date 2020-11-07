@@ -4,7 +4,8 @@ from os.path import join as _join
 import warnings
 from osgeo import ogr
 
-from wepppy.all_your_base import RasterDatasetInterpolator, RDIOutOfBoundsException, isfloat
+from wepppy.all_your_base import isfloat
+from wepppy.all_your_base.geo import RasterDatasetInterpolator, RDIOutOfBoundsException
 
 _thisdir = os.path.dirname(__file__)
 
