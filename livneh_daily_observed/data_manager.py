@@ -4,9 +4,8 @@ from os.path import split as _split
 from os.path import exists as _exists
 
 from glob import glob
-from pprint import pprint
 
-from wepppy.all_your_base import haversine
+from wepppy.all_your_base.geo import haversine
 
 _thisdir = os.path.dirname(__file__)
 _data_dir = os.path.abspath(_join(_thisdir, 'build'))

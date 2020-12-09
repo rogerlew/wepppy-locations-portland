@@ -18,7 +18,8 @@ from datetime import date
 
 import jsonpickle
 
-from wepppy.all_your_base import RasterDatasetInterpolator, isfloat, RDIOutOfBoundsException
+from wepppy.all_your_base import isfloat
+from wepppy.all_your_base.geo import RasterDatasetInterpolator, RDIOutOfBoundsException
 from wepppy.nodb.base import NoDbBase, TriggerEvents
 
 from wepppy.nodb.mods.locations.location_mixin import LocationMixin
@@ -101,6 +102,7 @@ class PortlandMod(NoDbBase, LocationMixin):
             assert isinstance(db, PortlandMod), db
 
             if _exists(_join(wd, 'READONLY')):
+                db.wd = os.path.abspath(wd)
                 return db
 
             if os.path.abspath(wd) != os.path.abspath(db.wd):
