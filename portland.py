@@ -18,8 +18,10 @@ from datetime import date
 
 import jsonpickle
 
-from wepppy.all_your_base import isfloat
-from wepppy.all_your_base.geo import RasterDatasetInterpolator, RDIOutOfBoundsException
+from deprecated import deprecated
+
+
+from wepppy.all_your_base.geo import RasterDatasetInterpolator, isfloat, RDIOutOfBoundsException
 from wepppy.nodb.base import NoDbBase, TriggerEvents
 
 from wepppy.nodb.mods.locations.location_mixin import LocationMixin
@@ -68,7 +70,7 @@ def _gridmet_cli_adjust(cli_dir, cli_fn, pp_scale):
 
     return 'adj_' + cli_fn
 
-
+@deprecated(reason='Use portland-disturbed config instead')
 class PortlandMod(NoDbBase, LocationMixin):
     __name__ = 'PortlandMod'
 
@@ -102,7 +104,6 @@ class PortlandMod(NoDbBase, LocationMixin):
             assert isinstance(db, PortlandMod), db
 
             if _exists(_join(wd, 'READONLY')):
-                db.wd = os.path.abspath(wd)
                 return db
 
             if os.path.abspath(wd) != os.path.abspath(db.wd):
@@ -331,4 +332,4 @@ class PortlandMod(NoDbBase, LocationMixin):
                 mid_season_crop_coeff = PMET__MID_SEASON_CROP_COEFF__DEFAULT
 
         p_coeff = 0.75
-        wepp._prep_pmet(mid_season_crop_coeff=mid_season_crop_coeff, p_coeff=p_coeff)
+        wepp._prep_pmet(kcb=mid_season_crop_coeff, rawp=p_coeff)
