@@ -7,7 +7,6 @@ from copy import deepcopy
 
 from wepppy.climates.cligen import ClimateFile
 from wepppy.wepp.soils.utils import modify_kslast
-from wepppy.nodb import *
 from os.path import join as _join
 from wepppy.wepp.out import TotalWatSed
 from wepppy.export import arc_export
@@ -86,71 +85,71 @@ if __name__ == '__main__':
                        landuse=None,
                        cs=50, erod=0.000001,
                        csa=5, mcl=65),
-                #   dict(wd='SouthFork',
-                #        extent=[-122.22908020019533, 45.268121280142886, -121.74842834472658, 45.60539133629575],
-                #        map_center=[-121.98875427246095, 45.43700828867391],
-                #        map_zoom=11,
-                #        outlet=[-122.1083333, 45.444722],
-                #        landuse=None,
-                #        cs=50, erod=0.000001,
-                #        csa=5, mcl=65),
-                #   dict(wd='CedarCreek',
-                #        extent=[-122.22908020019533, 45.268121280142886, -121.74842834472658, 45.60539133629575],
-                #        map_center=[-121.98875427246095, 45.43700828867391],
-                #        map_zoom=11,
-                #        outlet=[-122.03486546021158, 45.45789702345389],
-                #        landuse=None,
-                #        cs=50, erod=0.000001,
-                #        csa=5, mcl=65),
-                #   dict(wd='BlazedAlder',
-                #        extent=[-122.22908020019533, 45.268121280142886, -121.74842834472658, 45.60539133629575],
-                #        map_center=[-121.98875427246095, 45.43700828867391],
-                #        map_zoom=11,
-                #        outlet=[-121.89124077457025, 45.45220046527376],
-                #        landuse=None,
-                #        cs=50, erod=0.000001,
-                #        csa=5, mcl=65),
-                #  dict(wd='FirCreek',
-                #        extent=[-122.22908020019533, 45.268121280142886, -121.74842834472658, 45.60539133629575],
-                #        map_center=[-121.98875427246095, 45.43700828867391],
-                #        map_zoom=11,
-                #        outlet=[-122.02581486422827, 45.47989113970676],
-                #        landuse=None,
-                #        cs=50, erod=0.000001,
-                #        csa=5, mcl=65),
-                #  dict(wd='BRnearMultnoma',
-                #        extent=[-122.22908020019533, 45.268121280142886, -121.74842834472658, 45.60539133629575],
-                #        map_center=[-121.98875427246095, 45.43700828867391],
-                #        map_zoom=11,
-                #        outlet=[-122.01099283401598, 45.498468197226025],
-                #        landuse=None,
-                #        cs=50, erod=0.000001,
-                #        csa=10, mcl=100),
-                # dict(wd='NorthFork',
-                #      extent=[-122.22908020019533, 45.268121280142886, -121.74842834472658, 45.60539133629575],
-                #      map_center=[-121.98875427246095, 45.43700828867391],
-                #      map_zoom=11,
-                #      outlet=[-122.03554486123724, 45.49455561832556],
-                #      landuse=None,
-                #      cs=50, erod=0.000001,
-                #       csa=10, mcl=100),
-                # dict(wd='LittleSandy',
-                #       extent=[-122.22908020019533, 45.268121280142886, -121.74842834472658, 45.60539133629575],
-                #       map_center=[-121.98875427246095, 45.43700828867391],
-                #       map_zoom=11,
-                #       outlet=[-122.17147271631961, 45.415421615033246],
-                #       landuse=None,
-                #       cs=50, erod=0.000001,
-                #       csa=10, mcl=100)
+                       #   dict(wd='SouthFork',
+                       #        extent=[-122.22908020019533, 45.268121280142886, -121.74842834472658, 45.60539133629575],
+                       #        map_center=[-121.98875427246095, 45.43700828867391],
+                       #        map_zoom=11,
+                       #        outlet=[-122.1083333, 45.444722],
+                       #        landuse=None,
+                       #        cs=50, erod=0.000001,
+                       #        csa=5, mcl=65),
+                       #   dict(wd='CedarCreek',
+                       #        extent=[-122.22908020019533, 45.268121280142886, -121.74842834472658, 45.60539133629575],
+                       #        map_center=[-121.98875427246095, 45.43700828867391],
+                       #        map_zoom=11,
+                       #        outlet=[-122.03486546021158, 45.45789702345389],
+                       #        landuse=None,
+                       #        cs=50, erod=0.000001,
+                       #        csa=5, mcl=65),
+                       #   dict(wd='BlazedAlder',
+                       #        extent=[-122.22908020019533, 45.268121280142886, -121.74842834472658, 45.60539133629575],
+                       #        map_center=[-121.98875427246095, 45.43700828867391],
+                       #        map_zoom=11,
+                       #        outlet=[-121.89124077457025, 45.45220046527376],
+                       #        landuse=None,
+                       #        cs=50, erod=0.000001,
+                       #        csa=5, mcl=65),
+                       #  dict(wd='FirCreek',
+                       #        extent=[-122.22908020019533, 45.268121280142886, -121.74842834472658, 45.60539133629575],
+                       #        map_center=[-121.98875427246095, 45.43700828867391],
+                       #        map_zoom=11,
+                       #        outlet=[-122.02581486422827, 45.47989113970676],
+                       #        landuse=None,
+                       #        cs=50, erod=0.000001,
+                       #        csa=5, mcl=65),
+                       #  dict(wd='BRnearMultnoma',
+                       #        extent=[-122.22908020019533, 45.268121280142886, -121.74842834472658, 45.60539133629575],
+                       #        map_center=[-121.98875427246095, 45.43700828867391],
+                       #        map_zoom=11,
+                       #        outlet=[-122.01099283401598, 45.498468197226025],
+                       #        landuse=None,
+                       #        cs=50, erod=0.000001,
+                       #        csa=10, mcl=100),
+                       # dict(wd='NorthFork',
+                       #      extent=[-122.22908020019533, 45.268121280142886, -121.74842834472658, 45.60539133629575],
+                       #      map_center=[-121.98875427246095, 45.43700828867391],
+                       #      map_zoom=11,
+                       #      outlet=[-122.03554486123724, 45.49455561832556],
+                       #      landuse=None,
+                       #      cs=50, erod=0.000001,
+                       #       csa=10, mcl=100),
+                       # dict(wd='LittleSandy',
+                       #       extent=[-122.22908020019533, 45.268121280142886, -121.74842834472658, 45.60539133629575],
+                       #       map_center=[-121.98875427246095, 45.43700828867391],
+                       #       map_zoom=11,
+                       #       outlet=[-122.17147271631961, 45.415421615033246],
+                       #       landuse=None,
+                       #       cs=50, erod=0.000001,
+                       #       csa=10, mcl=100)
                ]
 
 
-    # for new run
-    # dict(clean=True, build_soils=True, build_landuse=True, build_climates=True)
-    #
-    # setting clean to True deletes the project and re-delineates the watershed.
-    # after built set clean to False
-    #
+               # for new run
+               # dict(clean=True, build_soils=True, build_landuse=True, build_climates=True)
+               #
+               # setting clean to True deletes the project and re-delineates the watershed.
+               # after built set clean to False
+               #
 
     scenarios = {
         # 'daymet_groundwater_pmetpara':
@@ -161,8 +160,8 @@ if __name__ == '__main__':
         #    dict(clean=False, build_soils=True, build_landuse=False, build_climates=False),
         'gridmet_grwlnd.2_pmetpara':
             dict(clean=False, build_soils=True, build_landuse=False, build_climates=False),
-        # 'gridmet_landslides_pmetpara':
-        #     dict(clean=True, build_soils=True, build_landuse=True, build_climates=True),
+            # 'gridmet_landslides_pmetpara':
+            #     dict(clean=True, build_soils=True, build_landuse=True, build_climates=True),
     }
 
 
@@ -188,14 +187,12 @@ if __name__ == '__main__':
                     wd = 'portland_{watershed_name}_{scenario}_csa{csa}_mcl{mcl}_cs{cs}_erod{erod}'\
                          .format(watershed_name=watershed_name, scenario=scenario, csa=csa, mcl=mcl, cs=cs, erod=erod)
 
-                    print(wd)
-
                     if clean:
                         if _exists(wd):
                             shutil.rmtree(wd)
                         os.mkdir(wd)
 
-                        ron = Ron(wd, config)
+                        ron = Wepp(wd, config)
                         ron.name = wd
                         ron.set_map(extent, map_center, zoom=map_zoom)
                         ron.fetch_dem()
@@ -216,7 +213,7 @@ if __name__ == '__main__':
                         topaz_ids = [top.split('_')[1] for top in translator.iter_sub_ids()]
 
                     else:
-                        ron = Ron.getInstance(wd)
+                        ron = Wepp.getInstance(wd)
                         topaz = Topaz.getInstance(wd)
                         watershed = Watershed.getInstance(wd)
 
@@ -295,10 +292,9 @@ if __name__ == '__main__':
 
                             _domsoil_d[str(topaz_id)] = _dom
 
-                        soils.lock()
-                        soils.domsoil_d = _domsoil_d
-                        soils.soils = _soils
-                        soils.dump_and_unlock()
+                        with soils.locked():
+                            soils.domsoil_d = _domsoil_d
+                            soils.soils = _soils
                         soils = Soils.getInstance(wd)
 
                     climate = Climate.getInstance(wd)
@@ -309,36 +305,35 @@ if __name__ == '__main__':
                             climate.climate_spatialmode = ClimateSpatialMode.Multiple
                             climate.input_years = 21
 
-                            climate.lock()
-                            lng, lat = watershed.centroid
-
-                            cli_path = lvdm.closest_cli(lng, lat)
-                            _dir, cli_fn = _split(cli_path)
-                            shutil.copyfile(cli_path, _join(climate.cli_dir, cli_fn))
-                            climate.cli_fn = cli_fn
-
-                            par_path = lvdm.par_path
-                            _dir, par_fn = _split(par_path)
-                            shutil.copyfile(par_path, _join(climate.cli_dir, par_fn))
-                            climate.par_fn = par_fn
-
-                            sub_par_fns = {}
-                            sub_cli_fns = {}
-                            for topaz_id, ss in watershed._subs_summary.items():
-                                print(topaz_id)
-                                lng, lat = ss.centroid.lnglat
+                            with climate.locked():
+                                lng, lat = watershed.centroid
 
                                 cli_path = lvdm.closest_cli(lng, lat)
                                 _dir, cli_fn = _split(cli_path)
-                                run_cli_path = _join(climate.cli_dir, cli_fn)
-                                if not _exists(run_cli_path):
-                                    shutil.copyfile(cli_path, run_cli_path)
-                                sub_cli_fns[topaz_id] = cli_fn
-                                sub_par_fns[topaz_id] = par_fn
+                                shutil.copyfile(cli_path, _join(climate.cli_dir, cli_fn))
+                                climate.cli_fn = cli_fn
 
-                            climate.sub_par_fns = sub_par_fns
-                            climate.sub_cli_fns = sub_cli_fns
-                            climate.dump_and_unlock()
+                                par_path = lvdm.par_path
+                                _dir, par_fn = _split(par_path)
+                                shutil.copyfile(par_path, _join(climate.cli_dir, par_fn))
+                                climate.par_fn = par_fn
+
+                                sub_par_fns = {}
+                                sub_cli_fns = {}
+                                for topaz_id, ss in watershed._subs_summary.items():
+                                    print(topaz_id)
+                                    lng, lat = ss.centroid.lnglat
+
+                                    cli_path = lvdm.closest_cli(lng, lat)
+                                    _dir, cli_fn = _split(cli_path)
+                                    run_cli_path = _join(climate.cli_dir, cli_fn)
+                                    if not _exists(run_cli_path):
+                                        shutil.copyfile(cli_path, run_cli_path)
+                                    sub_cli_fns[topaz_id] = cli_fn
+                                    sub_par_fns[topaz_id] = par_fn
+
+                                climate.sub_par_fns = sub_par_fns
+                                climate.sub_cli_fns = sub_cli_fns
 
                         elif 'daymet' in scenario:
                             stations = climate.find_closest_stations()
@@ -350,17 +345,14 @@ if __name__ == '__main__':
 
                             climate.build(verbose=1)
 
-                            climate.lock()
+                            with climate.locked():
+                                cli_dir = climate.cli_dir
+                                adj_cli_fn = _daymet_cli_adjust(cli_dir, climate.cli_fn, watershed_name)
+                                climate.cli_fn = adj_cli_fn
 
-                            cli_dir = climate.cli_dir
-                            adj_cli_fn = _daymet_cli_adjust(cli_dir, climate.cli_fn, watershed_name)
-                            climate.cli_fn = adj_cli_fn
-
-                            for topaz_id in climate.sub_cli_fns:
-                                adj_cli_fn = _daymet_cli_adjust(cli_dir, climate.sub_cli_fns[topaz_id], watershed_name)
-                                climate.sub_cli_fns[topaz_id] = adj_cli_fn
-
-                            climate.dump_and_unlock()
+                                for topaz_id in climate.sub_cli_fns:
+                                    adj_cli_fn = _daymet_cli_adjust(cli_dir, climate.sub_cli_fns[topaz_id], watershed_name)
+                                    climate.sub_cli_fns[topaz_id] = adj_cli_fn
 
                         elif 'gridmet' in scenario:
                             stations = climate.find_closest_stations()
@@ -372,19 +364,16 @@ if __name__ == '__main__':
 
                             climate.build(verbose=1)
 
-                            climate.lock()
+                            with climate.locked():
+                                cli_dir = climate.cli_dir
+                                adj_cli_fn = _gridmet_cli_adjust(cli_dir, climate.cli_fn, watershed_name)
+                                climate.cli_fn = adj_cli_fn
 
-                            cli_dir = climate.cli_dir
-                            adj_cli_fn = _gridmet_cli_adjust(cli_dir, climate.cli_fn, watershed_name)
-                            climate.cli_fn = adj_cli_fn
+                                for topaz_id in climate.sub_cli_fns:
+                                    adj_cli_fn = _gridmet_cli_adjust(cli_dir, climate.sub_cli_fns[topaz_id], watershed_name)
+                                    climate.sub_cli_fns[topaz_id] = adj_cli_fn
 
-                            for topaz_id in climate.sub_cli_fns:
-                                adj_cli_fn = _gridmet_cli_adjust(cli_dir, climate.sub_cli_fns[topaz_id], watershed_name)
-                                climate.sub_cli_fns[topaz_id] = adj_cli_fn
-
-                            climate.dump_and_unlock()
-
-                    # build a climate for the channels.
+                            # build a climate for the channels.
 
                     print('running wepp')
                     wepp = Wepp.getInstance(wd)

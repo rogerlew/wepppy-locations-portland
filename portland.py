@@ -16,25 +16,29 @@ from copy import deepcopy
 
 from datetime import date
 
-import jsonpickle
 
 from deprecated import deprecated
 
 
 from wepppy.all_your_base.geo import RasterDatasetInterpolator, isfloat, RDIOutOfBoundsException
-from wepppy.nodb.base import NoDbBase, TriggerEvents
+from wepppy.nodb.base import NoDbBase, TriggerEvents, nodb_setter
 
 from wepppy.nodb.mods.locations.location_mixin import LocationMixin
 
-from wepppy.nodb.climate import Climate, ClimateMode, ClimateSpatialMode
-from wepppy.nodb.soils import Soils
-from wepppy.nodb.watershed import Watershed
-from wepppy.nodb.wepp import Wepp
+from wepppy.nodb.core import *
 from wepppy.wepp.soils.utils import modify_kslast
 
 
 from .livneh_daily_observed import LivnehDataManager
 from .bedrock import ShallowLandSlideSusceptibility, BullRunBedrock
+
+__all__ = [
+    'PortlandModNoDbLockedException',
+    'DEFAULT_WEPP_TYPE',
+    'PMET__MID_SEASON_CROP_COEFF__DEFAULT',
+    'CRITICAL_SHEAR_DEFAULT',
+    'PortlandMod',
+]
 
 _thisdir = os.path.dirname(__file__)
 _data_dir = _join(_thisdir)
@@ -74,52 +78,15 @@ def _gridmet_cli_adjust(cli_dir, cli_fn, pp_scale):
 class PortlandMod(NoDbBase, LocationMixin):
     __name__ = 'PortlandMod'
 
-    def __init__(self, wd, cfg_fn):
-        super(PortlandMod, self).__init__(wd, cfg_fn)
+    filename = 'portland.nodb'
+    
+    def __init__(self, wd, cfg_fn, run_group=None, group_name=None):
+        super(PortlandMod, self).__init__(wd, cfg_fn, run_group=run_group, group_name=group_name)
 
-        self._lc_lookup_fn = 'landSoilLookup.csv'
-        self._default_wepp_type = DEFAULT_WEPP_TYPE
-        self._data_dir = _data_dir
-
-        self.lock()
-
-        # noinspection PyBroadException
-        try:
-
-            self.dump_and_unlock()
-
-        except Exception:
-            self.unlock('-f')
-            raise
-
-    #
-    # Required for NoDbBase Subclass
-    #
-
-    # noinspection PyPep8Naming
-    @staticmethod
-    def getInstance(wd):
-        with open(_join(wd, 'portland.nodb')) as fp:
-            db = jsonpickle.decode(fp.read())
-            assert isinstance(db, PortlandMod), db
-
-            if _exists(_join(wd, 'READONLY')):
-                return db
-
-            if os.path.abspath(wd) != os.path.abspath(db.wd):
-                db.wd = wd
-                db.lock()
-                db.dump_and_unlock()
-
-            return db
-
-    @property
-    def _nodb(self):
-        return _join(self.wd, 'portland.nodb')
-
-    @property
-    def _lock(self):
-        return _join(self.wd, 'portland.nodb.lock')
+        with self.locked():
+            self._lc_lookup_fn = 'landSoilLookup.csv'
+            self._default_wepp_type = DEFAULT_WEPP_TYPE
+            self._data_dir = _data_dir
 
     def on(self, evt):
         if evt == TriggerEvents.LANDUSE_DOMLC_COMPLETE:
@@ -129,8 +96,8 @@ class PortlandMod(NoDbBase, LocationMixin):
         elif evt == TriggerEvents.SOILS_BUILD_COMPLETE:
             self.modify_soils()
             self.modify_soils_kslast()
-        # elif evt == TriggerEvents.PREPPING_PHOSPHORUS:
-        #     self.determine_phosphorus()
+            # elif evt == TriggerEvents.PREPPING_PHOSPHORUS:
+            #     self.determine_phosphorus()
         elif evt == TriggerEvents.CLIMATE_BUILD_COMPLETE:
             climate = Climate.getInstance(self.wd)
 
@@ -152,17 +119,9 @@ class PortlandMod(NoDbBase, LocationMixin):
         return self._lc_lookup_fn
 
     @lc_lookup_fn.setter
+    @nodb_setter
     def lc_lookup_fn(self, value):
-        self.lock()
-
-        # noinspection PyBroadException
-        try:
-            self._lc_lookup_fn = value
-            self.dump_and_unlock()
-
-        except Exception:
-            self.unlock('-f')
-            raise
+        self._lc_lookup_fn = value
 
     @property
     def default_wepp_type(self):
@@ -172,17 +131,9 @@ class PortlandMod(NoDbBase, LocationMixin):
         return self._default_wepp_type
 
     @default_wepp_type.setter
+    @nodb_setter
     def default_wepp_type(self, value):
-        self.lock()
-
-        # noinspection PyBroadException
-        try:
-            self._default_wepp_type = value
-            self.dump_and_unlock()
-
-        except Exception:
-            self.unlock('-f')
-            raise
+        self._default_wepp_type = value
 
     @property
     def data_dir(self):
@@ -195,27 +146,25 @@ class PortlandMod(NoDbBase, LocationMixin):
 
     def modify_climates(self, adjust_func, pp_scale_raster):
         climate = Climate.getInstance(self.wd)
-        climate.lock()
-        watershed = Watershed.getInstance(self.wd)
-        lng, lat = watershed.centroid
-        rdi = RasterDatasetInterpolator(_join(_data_dir, pp_scale_raster))
-        pp_scale = rdi.get_location_info(lng, lat)
-        if not isfloat(pp_scale):
-            return
+        with climate.locked():
+            watershed = Watershed.getInstance(self.wd)
+            lng, lat = watershed.centroid
+            rdi = RasterDatasetInterpolator(_join(_data_dir, pp_scale_raster))
+            pp_scale = rdi.get_location_info(lng, lat)
+            if not isfloat(pp_scale):
+                return
 
-        if pp_scale < 0.0:
-            return
+            if pp_scale < 0.0:
+                return
 
-        cli_dir = climate.cli_dir
-        adj_cli_fn = adjust_func(cli_dir, climate.cli_fn, pp_scale)
-        climate.cli_fn = adj_cli_fn
+            cli_dir = climate.cli_dir
+            adj_cli_fn = adjust_func(cli_dir, climate.cli_fn, pp_scale)
+            climate.cli_fn = adj_cli_fn
 
-        if climate.climate_spatialmode == ClimateSpatialMode.Multiple:
-            for topaz_id in climate.sub_cli_fns:
-                adj_cli_fn = adjust_func(cli_dir, climate.sub_cli_fns[topaz_id], pp_scale)
-                climate.sub_cli_fns[topaz_id] = adj_cli_fn
-
-        climate.dump_and_unlock()
+            if climate.climate_spatialmode == ClimateSpatialMode.Multiple:
+                for topaz_id in climate.sub_cli_fns:
+                    adj_cli_fn = adjust_func(cli_dir, climate.sub_cli_fns[topaz_id], pp_scale)
+                    climate.sub_cli_fns[topaz_id] = adj_cli_fn
 
     def modify_soils_kslast(self):
         wd = self.wd
@@ -281,10 +230,9 @@ class PortlandMod(NoDbBase, LocationMixin):
 
             _domsoil_d[str(topaz_id)] = _dom
 
-        soils.lock()
-        soils.domsoil_d = _domsoil_d
-        soils.soils = _soils
-        soils.dump_and_unlock()
+        with soils.locked():
+            soils.domsoil_d = _domsoil_d
+            soils.soils = _soils
 
     def modify_erod_cs(self):
         wd = self.wd
