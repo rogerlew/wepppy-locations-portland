@@ -1,0 +1,17 @@
+[Unit]
+Description=GitHub Actions runner for Portland data on wepp1
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/roger/actions-runner-portland
+ExecStart=/home/roger/actions-runner-portland/runsvc.sh
+Restart=always
+RestartSec=10
+KillMode=process
+KillSignal=SIGTERM
+TimeoutStopSec=5min
+UMask=0022
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,48 @@
+name: Update Portland data on wepp1
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: portland-data-wepp1
+  cancel-in-progress: false
+
+jobs:
+  update:
+    if: github.repository == 'rogerlew/wepppy-locations-portland' && github.ref == 'refs/heads/main'
+    runs-on: [self-hosted, Linux, X64, wepp1-portland-data]
+    timeout-minutes: 15
+    steps:
+      - name: Fast-forward the production checkout
+        shell: bash
+        env:
+          EXPECTED_COMMIT: ${{ github.sha }}
+          GIT_TERMINAL_PROMPT: '0'
+        run: |
+          set -euo pipefail
+          test "$(hostname -s)" = wepp1
+          cd /geodata/extended_mods_data/wepppy-locations-portland
+          exec 9>.git/wepp1-update.lock
+          flock -n 9
+          test "$(git remote get-url origin)" = https://github.com/rogerlew/wepppy-locations-portland
+          test "$(git branch --show-current)" = main
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git status --short
+            echo 'Checkout has local changes; resolve them before retrying.' >&2
+            exit 1
+          fi
+          before=$(git rev-parse HEAD)
+          git pull --ff-only origin main
+          after=$(git rev-parse HEAD)
+          git merge-base --is-ancestor "$EXPECTED_COMMIT" HEAD
+          test -z "$(git status --porcelain)"
+          printf 'Before: %s\nAfter: %s\n' "$before" "$after"
+          {
+            printf 'Updated `/geodata/extended_mods_data/wepppy-locations-portland` on `wepp1`.\n\n'
+            printf -- '- Previous commit: `%s`\n- Deployed commit: `%s`\n' "$before" "$after"
+          } >> "$GITHUB_STEP_SUMMARY"
